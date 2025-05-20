@@ -1,513 +1,186 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memorama - Juego de Memoria</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
-    <style>
-        /* Variables CSS */
-        :root {
-            --primary: #3f51b5;
-            --primary-light: rgba(63, 81, 181, 0.1);
-            --secondary: #ff9800;
-            --accent: #e91e63;
-            --success: #4caf50;
-            --error: #f44336;
-            --bg-color: #f5f5f5;
-            --card-color: #ffffff;
-            --text-dark: #424242;
-            --text-medium: #757575;
-            --text-light: #9e9e9e;
-            --border-color: #e0e0e0;
-            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
-            --radius: 8px;
-            --font-heading: 'Poppins', sans-serif;
-            --font-body: 'Roboto', sans-serif;
-            --transition: 0.3s ease;
-        }
-
-        /* Reseteo básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .game-info {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .stat-box {
-            background-color: #fff;
-            border-radius: var(--radius);
-            padding: 15px;
-            min-width: 100px;
-            text-align: center;
-            box-shadow: var(--shadow);
-        }
-
-        .stat-label {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: var(--radius);
-            border: none;
-            font-family: var(--font-body);
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            transition: all 0.2s;
-        }
-
-        .btn i {
-            margin-right: 8px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary);
-            opacity: 0.9;
-        }
-
-        .btn-secondary {
-            background-color: var(--secondary);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--secondary);
-            opacity: 0.9;
-        }
-
-        .game-board {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 600px) {
-            .game-board {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .card {
-            aspect-ratio: 1;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-front {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: var(--shadow);
-        }
-
-        .card-back {
-            background-color: white;
-            border: 2px solid var(--primary);
-            transform: rotateY(180deg);
-            font-size: 2rem;
-        }
-
-        .card-back.matched {
-            border-color: var(--success);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-        }
-
-        .modal-content {
-            background-color: white;
-            border-radius: var(--radius);
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .modal h2 {
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-
-        .result-stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0 30px;
-        }
-
-        .result-item .result-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .result-item .result-label {
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Memorama - Juego de Memoria</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Memorama</h1>
-            <p>El clásico juego de memoria</p>
-        </header>
+  <div class="container">
+    <header>
+      <h1>Memorama</h1>
+      <p>El clásico juego de memoria</p>
+    </header>
 
-        <div class="game-info">
-            <div class="stat-box">
-                <div class="stat-label">Movimientos</div>
-                <div class="stat-value" id="moves">0</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Pares</div>
-                <div class="stat-value"><span id="pairs">0</span>/<span id="total-pairs">8</span></div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Tiempo</div>
-                <div class="stat-value" id="timer">00:00</div>
-            </div>
+    <main>
+      <section aria-label="Tablero de juego" id="game-section">
+        <div id="game-idle-overlay" class="idle-overlay">
+          <button id="btn-start-overlay" class="btn btn-primary">
+            <i class="mdi mdi-play"></i> Iniciar Juego
+          </button>
         </div>
+        <div id="game-cards-container" class="game-board"></div>
+      </section>
 
-        <div class="controls">
-            <button id="start-btn" class="btn btn-primary">
-                <i class="mdi mdi-play"></i> Iniciar
-            </button>
-            <button id="reset-btn" class="btn btn-secondary">
-                <i class="mdi mdi-refresh"></i> Reiniciar
-            </button>
-        </div>
+      <aside aria-label="Marcador y puntuaciones altas" id="scoreboard-aside">
+        <section class="game-info" aria-label="Información del juego">
+          <div class="stat-box">
+            <div class="stat-label">Movimientos</div>
+            <div class="stat-value" id="game-moves">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Pares encontrados</div>
+            <div class="stat-value" id="game-matched-pairs">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Total pares</div>
+            <div class="stat-value" id="game-total-pairs">8</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Tiempo</div>
+            <div class="stat-value" id="game-time">00:00</div>
+          </div>
+        </section>
 
-        <div id="game-board" class="game-board">
-            <!-- Las cartas se generarán dinámicamente aquí -->
+        <section class="controls" aria-label="Controles del juego">
+          <button id="btn-start" class="btn btn-primary">
+            <i class="mdi mdi-play"></i> Iniciar
+          </button>
+          <button id="btn-reset" class="btn btn-secondary">
+            <i class="mdi mdi-refresh"></i> Reiniciar
+          </button>
+          <button id="btn-settings" class="btn btn-outline">
+            <i class="mdi mdi-cog"></i> Configuración
+          </button>
+          <button id="btn-instructions" class="btn btn-outline">
+            <i class="mdi mdi-help-circle"></i> Instrucciones
+          </button>
+        </section>
+
+        <section id="card-sets-container" aria-label="Sets de cartas disponibles" class="card-sets-list">
+          <!-- Sets de cartas se renderizarán aquí -->
+        </section>
+
+        <section id="difficulty-buttons" aria-label="Niveles de dificultad" class="difficulty-buttons">
+          <button data-difficulty="easy" class="btn btn-outline active">Fácil</button>
+          <button data-difficulty="medium" class="btn btn-outline">Medio</button>
+          <button data-difficulty="hard" class="btn btn-outline">Difícil</button>
+        </section>
+
+        <section class="high-scores-section" aria-label="Puntuaciones altas">
+          <h2>Puntuaciones Altas</h2>
+          <div class="search-container">
+            <input
+              type="text"
+              id="high-score-filter"
+              placeholder="Filtrar por nombre"
+              aria-label="Filtrar puntuaciones altas por nombre"
+            />
+          </div>
+          <table id="high-scores-table" class="high-scores-table" aria-live="polite" aria-relevant="all">
+            <!-- Puntuaciones altas se renderizarán aquí -->
+          </table>
+          <div id="high-scores-empty" class="hidden" role="alert" aria-live="assertive">
+            No hay puntuaciones altas para mostrar.
+          </div>
+          <div class="high-scores-actions">
+            <button id="btn-clear-scores" class="btn btn-danger">Borrar todas</button>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <!-- Modal: Juego completado -->
+    <div id="game-complete-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="game-complete-title">
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Cerrar">&times;</button>
+        <h2 id="game-complete-title">¡Felicidades! Has ganado</h2>
+        <div class="result-stats">
+          <div class="result-item">
+            <div class="result-value" id="result-moves">0</div>
+            <div class="result-label">Movimientos</div>
+          </div>
+          <div class="result-item">
+            <div class="result-value" id="result-time">00:00</div>
+            <div class="result-label">Tiempo</div>
+          </div>
+          <div class="result-item">
+            <div class="result-value" id="result-score">0</div>
+            <div class="result-label">Puntuación</div>
+          </div>
         </div>
+        <form id="high-score-form" aria-label="Formulario para guardar puntuación">
+          <label for="player-name-input">Nombre del jugador:</label>
+          <input
+            type="text"
+            id="player-name-input"
+            name="playerName"
+            required
+            minlength="2"
+            maxlength="20"
+            aria-required="true"
+            placeholder="Tu nombre"
+          />
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary modal-close">Cancelar</button>
+          </div>
+        </form>
+        <button id="btn-play-again" class="btn btn-primary">Jugar de nuevo</button>
+      </div>
     </div>
 
-    <div id="win-modal" class="modal">
-        <div class="modal-content">
-            <h2>¡Felicidades! Has ganado</h2>
-            <div class="result-stats">
-                <div class="result-item">
-                    <div class="result-value" id="result-moves">0</div>
-                    <div class="result-label">Movimientos</div>
-                </div>
-                <div class="result-item">
-                    <div class="result-value" id="result-time">00:00</div>
-                    <div class="result-label">Tiempo</div>
-                </div>
-            </div>
-            <button id="play-again-btn" class="btn btn-primary">Jugar de nuevo</button>
+    <!-- Modal: Configuración -->
+    <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Cerrar">&times;</button>
+        <h2 id="settings-title">Configuración</h2>
+        <section aria-label="Seleccionar dificultad">
+          <h3>Dificultad</h3>
+          <div id="settings-difficulty-buttons" class="difficulty-buttons">
+            <button data-difficulty="easy" class="btn btn-outline active">Fácil</button>
+            <button data-difficulty="medium" class="btn btn-outline">Medio</button>
+            <button data-difficulty="hard" class="btn btn-outline">Difícil</button>
+          </div>
+        </section>
+        <section aria-label="Seleccionar set de cartas">
+          <h3>Sets de cartas</h3>
+          <div id="settings-card-sets-container" class="card-sets-list">
+            <!-- Sets de cartas para configuración -->
+          </div>
+        </section>
+        <div class="modal-actions">
+          <button id="btn-save-settings" class="btn btn-primary">Guardar configuración</button>
+          <button class="btn btn-secondary modal-close">Cancelar</button>
         </div>
+      </div>
     </div>
 
-    <script>
-        // Datos del juego
-        const icons = [
-            'mdi-star', 'mdi-heart', 'mdi-bell', 'mdi-music',
-            'mdi-cube', 'mdi-car', 'mdi-gift', 'mdi-cake'
-        ];
+    <!-- Modal: Instrucciones -->
+    <div id="instructions-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="instructions-title">
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Cerrar">&times;</button>
+        <h2 id="instructions-title">Instrucciones</h2>
+        <p>
+          El objetivo del juego es encontrar todos los pares de cartas iguales en el menor tiempo y con la menor cantidad de movimientos posible.
+          Haz clic en las cartas para voltearlas y encontrar sus pares.
+        </p>
+        <p>
+          Puedes seleccionar diferentes sets de cartas y niveles de dificultad en la configuración.
+        </p>
+      </div>
+    </div>
 
-        // Estado del juego
-        const game = {
-            moves: 0,
-            pairs: 0,
-            totalPairs: 8,
-            cards: [],
-            flippedCards: [],
-            timer: null,
-            time: 0,
-            isPlaying: false
-        };
-
-        // Elementos del DOM
-        const board = document.getElementById('game-board');
-        const movesDisplay = document.getElementById('moves');
-        const pairsDisplay = document.getElementById('pairs');
-        const totalPairsDisplay = document.getElementById('total-pairs');
-        const timerDisplay = document.getElementById('timer');
-        const startBtn = document.getElementById('start-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const winModal = document.getElementById('win-modal');
-        const resultMovesDisplay = document.getElementById('result-moves');
-        const resultTimeDisplay = document.getElementById('result-time');
-        const playAgainBtn = document.getElementById('play-again-btn');
-
-        // Formatea el tiempo (segundos) en formato MM:SS
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const secs = (seconds % 60).toString().padStart(2, '0');
-            return `${mins}:${secs}`;
-        }
-
-        // Baraja un array
-        function shuffle(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-            }
-            return newArray;
-        }
-
-        // Inicia el juego
-        function startGame() {
-            resetGame();
-            game.isPlaying = true;
-            generateCards();
-            startTimer();
-        }
-
-        // Reinicia el juego
-        function resetGame() {
-            game.moves = 0;
-            game.pairs = 0;
-            game.flippedCards = [];
-            game.time = 0;
-            game.isPlaying = false;
-            
-            // Actualizar UI
-            movesDisplay.textContent = '0';
-            pairsDisplay.textContent = '0';
-            timerDisplay.textContent = '00:00';
-            board.innerHTML = '';
-            
-            // Detener timer
-            if (game.timer) {
-                clearInterval(game.timer);
-                game.timer = null;
-            }
-        }
-
-        // Inicia el temporizador
-        function startTimer() {
-            if (game.timer) clearInterval(game.timer);
-            
-            game.timer = setInterval(() => {
-                game.time++;
-                timerDisplay.textContent = formatTime(game.time);
-            }, 1000);
-        }
-
-        // Genera las cartas
-        function generateCards() {
-            // Crear pares de cartas
-            const cardPairs = [];
-            icons.forEach(icon => {
-                // Crear un par de cartas con el mismo ícono
-                cardPairs.push(
-                    { id: Date.now() + Math.random(), icon, paired: false },
-                    { id: Date.now() + Math.random(), icon, paired: false }
-                );
-            });
-            
-            // Barajar las cartas
-            game.cards = shuffle(cardPairs);
-            
-            // Crear elementos en el DOM
-            board.innerHTML = '';
-            game.cards.forEach(card => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'card';
-                cardElement.innerHTML = `
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <i class="mdi mdi-help-circle-outline"></i>
-                        </div>
-                        <div class="card-back">
-                            <i class="mdi ${card.icon}"></i>
-                        </div>
-                    </div>
-                `;
-                
-                // Añadir evento de clic
-                cardElement.addEventListener('click', () => handleCardClick(card, cardElement));
-                
-                // Añadir al tablero
-                board.appendChild(cardElement);
-            });
-        }
-
-        // Maneja el clic en una carta
-        function handleCardClick(card, cardElement) {
-            // Ignorar clic si no estamos jugando o ya hay 2 cartas volteadas o esta carta ya está emparejada o volteada
-            if (!game.isPlaying || 
-                game.flippedCards.length >= 2 || 
-                card.paired || 
-                game.flippedCards.some(c => c.id === card.id)) {
-                return;
-            }
-            
-            // Voltear la carta
-            cardElement.classList.add('flipped');
-            
-            // Añadir a cartas volteadas
-            game.flippedCards.push({
-                id: card.id,
-                element: cardElement,
-                card
-            });
-            
-            // Comprobar si tenemos un par
-            if (game.flippedCards.length === 2) {
-                // Incrementar movimientos
-                game.moves++;
-                movesDisplay.textContent = game.moves;
-                
-                const [firstCard, secondCard] = game.flippedCards;
-                
-                // Comprobar si coinciden
-                if (firstCard.card.icon === secondCard.card.icon) {
-                    // Las cartas coinciden
-                    game.pairs++;
-                    pairsDisplay.textContent = game.pairs;
-                    
-                    // Marcar como emparejadas
-                    firstCard.card.paired = true;
-                    secondCard.card.paired = true;
-                    
-                    // Aplicar estilo de coincidencia
-                    firstCard.element.querySelector('.card-back').classList.add('matched');
-                    secondCard.element.querySelector('.card-back').classList.add('matched');
-                    
-                    // Limpiar array de cartas volteadas
-                    game.flippedCards = [];
-                    
-                    // Comprobar si se completó el juego
-                    if (game.pairs === game.totalPairs) {
-                        endGame();
-                    }
-                } else {
-                    // Las cartas no coinciden, voltear después de un retraso
-                    setTimeout(() => {
-                        firstCard.element.classList.remove('flipped');
-                        secondCard.element.classList.remove('flipped');
-                        game.flippedCards = [];
-                    }, 1000);
-                }
-            }
-        }
-
-        // Finaliza el juego
-        function endGame() {
-            game.isPlaying = false;
-            
-            // Detener timer
-            clearInterval(game.timer);
-            
-            // Actualizar modal de victoria
-            resultMovesDisplay.textContent = game.moves;
-            resultTimeDisplay.textContent = formatTime(game.time);
-            
-            // Mostrar modal
-            winModal.style.display = 'flex';
-        }
-
-        // Event listeners
-        startBtn.addEventListener('click', startGame);
-        resetBtn.addEventListener('click', resetGame);
-        playAgainBtn.addEventListener('click', () => {
-            winModal.style.display = 'none';
-            startGame();
-        });
-
-        // Inicialización
-        totalPairsDisplay.textContent = game.totalPairs;
-    </script>
+    <script src="main.js"></script>
+  </div>
 </body>
 </html>
