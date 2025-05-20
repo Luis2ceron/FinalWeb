@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorama</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Memorama</h1>
+    </header>
+
+    <main>
+        <aside class="game-controls">
+            <div class="score-board">
+                <h2>Marcador</h2>
+                <p>Intentos: <span id="attempts">0</span></p>
+                <p>Pares encontrados: <span id="matches">0</span></p>
+                <p>Tiempo: <span id="time">00:00</span></p>
+            </div>
+
+            <div class="settings">
+                <h2>Configuración</h2>
+                <div class="form-group">
+                    <label for="difficulty">Dificultad:</label>
+                    <select id="difficulty">
+                        <option value="easy">Fácil (8 cartas)</option>
+                        <option value="medium" selected>Medio (12 cartas)</option>
+                        <option value="hard">Difícil (18 cartas)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="card-set">Set de cartas:</label>
+                    <select id="card-set"></select>
+                </div>
+
+                <button id="start-game">Nuevo Juego</button>
+            </div>
+
+            <div class="custom-cards">
+                <h2>Cartas Personalizadas</h2>
+                <form id="upload-form">
+                    <div class="form-group">
+                        <label for="card-name">Nombre de la carta:</label>
+                        <input type="text" id="card-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-image">Imagen:</label>
+                        <input type="file" id="card-image" accept="image/*" required>
+                    </div>
+                    <button type="submit">Añadir Carta</button>
+                </form>
+                <button id="create-custom-set">Crear Set Personalizado</button>
+                <div id="custom-cards-preview"></div>
+            </div>
+
+            <div class="high-scores">
+                <h2>Puntuaciones Altas</h2>
+                <div class="search-scores">
+                    <input type="text" id="search-player" placeholder="Buscar jugador...">
+                </div>
+                <ul id="high-scores-list"></ul>
+                <button id="clear-scores">Borrar todas las puntuaciones</button>
+            </div>
+        </aside>
+
+        <section class="game-board" id="game-board"></section>
+
+        <div class="modal" id="game-over-modal">
+            <div class="modal-content">
+                <h2>¡Juego Terminado!</h2>
+                <p id="final-score"></p>
+                <form id="save-score-form">
+                    <div class="form-group">
+                        <label for="player-name">Tu nombre:</label>
+                        <input type="text" id="player-name" required>
+                    </div>
+                    <button type="submit">Guardar Puntuación</button>
+                </form>
+                <button id="close-modal">Cerrar</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

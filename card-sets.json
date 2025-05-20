@@ -1,0 +1,50 @@
+[
+  {
+    "id": "animals",
+    "name": "Animales",
+    "cards": [
+      { "id": "cat", "image": "🐱" },
+      { "id": "dog", "image": "🐶" },
+      { "id": "lion", "image": "🦁" },
+      { "id": "tiger", "image": "🐯" },
+      { "id": "elephant", "image": "🐘" },
+      { "id": "monkey", "image": "🐵" },
+      { "id": "panda", "image": "🐼" },
+      { "id": "fox", "image": "🦊" },
+      { "id": "unicorn", "image": "🦄" },
+      { "id": "dragon", "image": "🐉" }
+    ]
+  },
+  {
+    "id": "fruits",
+    "name": "Frutas",
+    "cards": [
+      { "id": "apple", "image": "🍎" },
+      { "id": "banana", "image": "🍌" },
+      { "id": "grape", "image": "🍇" },
+      { "id": "melon", "image": "🍈" },
+      { "id": "watermelon", "image": "🍉" },
+      { "id": "orange", "image": "🍊" },
+      { "id": "lemon", "image": "🍋" },
+      { "id": "pear", "image": "🍐" },
+      { "id": "peach", "image": "🍑" },
+      { "id": "cherry", "image": "🍒" }
+    ]
+  },
+  {
+    "id": "vehicles",
+    "name": "Vehículos",
+    "cards": [
+      { "id": "car", "image": "🚗" },
+      { "id": "taxi", "image": "🚕" },
+      { "id": "bus", "image": "🚌" },
+      { "id": "truck", "image": "🚚" },
+      { "id": "bike", "image": "🚲" },
+      { "id": "scooter", "image": "🛴" },
+      { "id": "motorcycle", "image": "🏍️" },
+      { "id": "train", "image": "🚆" },
+      { "id": "airplane", "image": "✈️" },
+      { "id": "rocket", "image": "🚀" }
+    ]
+  }
+]
