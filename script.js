@@ -335,6 +335,12 @@ function renderGameBoard() {
                     img.src = trimmedImage;
                     img.alt = card.name || card.id;
                     frontElement.appendChild(img);
+                } else if (trimmedImage.toLowerCase().match(/\.(png|jpg|jpeg|gif|webp)(\?.*)?$/)) {
+                    // Es una URL de imagen normal (con posible query string)
+                    const img = document.createElement('img');
+                    img.src = trimmedImage;
+                    img.alt = card.name || card.id;
+                    frontElement.appendChild(img);
                 } else {
                     // Texto simple
                     frontElement.textContent = trimmedImage;
