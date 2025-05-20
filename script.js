@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalButton = document.getElementById('close-modal');
     const uploadForm = document.getElementById('upload-form');
     const cardNameInput = document.getElementById('card-name');
-    const cardImageInput = document.getElementById('card-image');
+    // Remove reference to old file input element since it no longer exists
+    // const cardImageInput = document.getElementById('card-image');
     const customCardsPreview = document.getElementById('custom-cards-preview');
     const createCustomSetBtn = document.getElementById('create-custom-set');
 
@@ -114,33 +115,43 @@ document.addEventListener('DOMContentLoaded', () => {
         createCustomSetBtn.addEventListener('click', createCustomSet);
     }
 
-    function handleUpload(e) {
+function handleUpload(e) {
         e.preventDefault();
         
         const name = cardNameInput.value.trim();
-        const file = cardImageInput.files[0];
+        // Remove reference to cardImageInput.files to avoid error
+        // const imageUrl = document.getElementById('card-image-url').value.trim();
+        const imageUrlInput = document.getElementById('card-image-url');
+        if (!imageUrlInput) {
+            alert('No se encontró el campo de URL de imagen');
+            return;
+        }
+        const imageUrl = imageUrlInput.value.trim();
         
-        if (!name || !file) {
+        if (!name || !imageUrl) {
             alert('Por favor completa todos los campos');
             return;
         }
         
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const card = {
-                id: `custom-${Date.now()}`,
-                name: name,
-                image: e.target.result
-            };
-            
-            customCards.push(card);
-            renderCustomCardsPreview();
-            
-            // Resetear el formulario
-            uploadForm.reset();
+        // Validar URL de imagen
+        const allowedExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+        const urlLower = imageUrl.toLowerCase();
+        if (!allowedExtensions.some(ext => urlLower.endsWith(ext))) {
+            alert('URL de imagen no soportada. Por favor ingresa una URL que termine en PNG, JPG, JPEG, GIF o WEBP.');
+            return;
+        }
+        
+        const card = {
+            id: `custom-${Date.now()}`,
+            name: name,
+            image: imageUrl
         };
         
-        reader.readAsDataURL(file);
+        customCards.push(card);
+        renderCustomCardsPreview();
+        
+        // Resetear el formulario
+        uploadForm.reset();
     }
 
     function renderCustomCardsPreview() {
@@ -287,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderGameBoard();
     }
 
-    function renderGameBoard() {
+function renderGameBoard() {
         gameBoard.innerHTML = '';
         
         // Configurar el grid según el número de cartas
@@ -306,19 +317,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const frontElement = document.createElement('div');
             frontElement.className = 'front';
-            
-            if (typeof card.image === 'string' && card.image.match(/\p{Emoji}/u)) {
-                // Es un emoji
-                frontElement.textContent = card.image;
-            } else if (card.image.startsWith('data:image')) {
-                // Es una imagen en base64
-                const img = document.createElement('img');
-                img.src = card.image;
-                img.alt = card.name || card.id;
-                frontElement.appendChild(img);
+
+            if (typeof card.image === 'string') {
+                const trimmedImage = card.image.trim();
+                if (trimmedImage.match(/\p{Emoji}/u)) {
+                    // Es un emoji
+                    frontElement.textContent = trimmedImage;
+                } else if (trimmedImage.toLowerCase().startsWith('data:image/webp') || trimmedImage.toLowerCase().endsWith('.webp')) {
+                    // Es una imagen webp en base64 o URL
+                    const img = document.createElement('img');
+                    img.src = trimmedImage;
+                    img.alt = card.name || card.id;
+                    frontElement.appendChild(img);
+                } else if (trimmedImage.toLowerCase().startsWith('data:image')) {
+                    // Es una imagen en base64 (no webp)
+                    const img = document.createElement('img');
+                    img.src = trimmedImage;
+                    img.alt = card.name || card.id;
+                    frontElement.appendChild(img);
+                } else {
+                    // Texto simple
+                    frontElement.textContent = trimmedImage;
+                    console.warn('Unexpected card image format:', trimmedImage);
+                }
             } else {
-                // Texto simple
+                // No es una cadena, mostrar como texto
                 frontElement.textContent = card.image;
+                console.warn('Card image is not a string:', card.image);
             }
 
             cardElement.appendChild(backElement);
