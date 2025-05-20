@@ -1,0 +1,128 @@
+// Sets de cartas para el juego Memorama
+const CARD_SETS = [
+    {
+        id: "icons",
+        name: "Iconos",
+        description: "Set clásico de iconos",
+        icons: [
+            { class: "mdi-star", color: "var(--secondary)" },
+            { class: "mdi-heart", color: "var(--accent)" },
+            { class: "mdi-airplane", color: "var(--primary)" },
+            { class: "mdi-baseball", color: "var(--secondary)" },
+            { class: "mdi-cake", color: "var(--accent)" },
+            { class: "mdi-music", color: "var(--primary)" },
+            { class: "mdi-football", color: "var(--secondary)" },
+            { class: "mdi-robot", color: "var(--primary)" },
+            { class: "mdi-google", color: "var(--accent)" },
+            { class: "mdi-bell", color: "var(--secondary)" },
+            { class: "mdi-car", color: "var(--primary)" },
+            { class: "mdi-gift", color: "var(--accent)" },
+            { class: "mdi-flash", color: "var(--secondary)" },
+            { class: "mdi-crown", color: "var(--primary)" },
+            { class: "mdi-food-apple", color: "var(--accent)" },
+            { class: "mdi-moon-waning-crescent", color: "var(--secondary)" },
+            { class: "mdi-bug", color: "var(--primary)" },
+            { class: "mdi-rocket", color: "var(--accent)" }
+        ]
+    },
+    {
+        id: "animals",
+        name: "Animales",
+        description: "Iconos de animales simpáticos",
+        icons: [
+            { class: "mdi-cat", color: "var(--primary)" },
+            { class: "mdi-dog", color: "var(--secondary)" },
+            { class: "mdi-rabbit", color: "var(--accent)" },
+            { class: "mdi-cow", color: "var(--primary)" },
+            { class: "mdi-duck", color: "var(--secondary)" },
+            { class: "mdi-pig", color: "var(--accent)" },
+            { class: "mdi-sheep", color: "var(--primary)" },
+            { class: "mdi-fish", color: "var(--secondary)" },
+            { class: "mdi-butterfly", color: "var(--accent)" },
+            { class: "mdi-spider", color: "var(--primary)" },
+            { class: "mdi-owl", color: "var(--secondary)" },
+            { class: "mdi-bird", color: "var(--accent)" },
+            { class: "mdi-jellyfish", color: "var(--primary)" },
+            { class: "mdi-turtle", color: "var(--secondary)" },
+            { class: "mdi-bee", color: "var(--accent)" },
+            { class: "mdi-bee-flower", color: "var(--primary)" },
+            { class: "mdi-dolphin", color: "var(--secondary)" },
+            { class: "mdi-shark", color: "var(--accent)" }
+        ]
+    },
+    {
+        id: "food",
+        name: "Comida",
+        description: "Iconos de comida deliciosa",
+        icons: [
+            { class: "mdi-food-apple", color: "var(--accent)" },
+            { class: "mdi-food", color: "var(--primary)" },
+            { class: "mdi-hamburger", color: "var(--secondary)" },
+            { class: "mdi-pizza", color: "var(--accent)" },
+            { class: "mdi-cupcake", color: "var(--primary)" },
+            { class: "mdi-ice-cream", color: "var(--secondary)" },
+            { class: "mdi-fruit-cherries", color: "var(--accent)" },
+            { class: "mdi-fruit-watermelon", color: "var(--primary)" },
+            { class: "mdi-coffee", color: "var(--secondary)" },
+            { class: "mdi-glass-mug", color: "var(--accent)" },
+            { class: "mdi-glass-wine", color: "var(--primary)" },
+            { class: "mdi-noodles", color: "var(--secondary)" },
+            { class: "mdi-pasta", color: "var(--accent)" },
+            { class: "mdi-cheese", color: "var(--primary)" },
+            { class: "mdi-egg", color: "var(--secondary)" },
+            { class: "mdi-candy", color: "var(--accent)" },
+            { class: "mdi-cake-variant", color: "var(--primary)" },
+            { class: "mdi-cookie", color: "var(--secondary)" }
+        ]
+    },
+    {
+        id: "sports",
+        name: "Deportes",
+        description: "Iconos relacionados con deportes",
+        icons: [
+            { class: "mdi-baseball", color: "var(--secondary)" },
+            { class: "mdi-baseball-bat", color: "var(--primary)" },
+            { class: "mdi-basketball", color: "var(--accent)" },
+            { class: "mdi-bicycle", color: "var(--secondary)" },
+            { class: "mdi-bowling", color: "var(--primary)" },
+            { class: "mdi-cricket", color: "var(--accent)" },
+            { class: "mdi-dumbbell", color: "var(--secondary)" },
+            { class: "mdi-football", color: "var(--primary)" },
+            { class: "mdi-football-helmet", color: "var(--accent)" },
+            { class: "mdi-golf", color: "var(--secondary)" },
+            { class: "mdi-hockey-sticks", color: "var(--primary)" },
+            { class: "mdi-martial-arts", color: "var(--accent)" },
+            { class: "mdi-play", color: "var(--secondary)" },
+            { class: "mdi-run", color: "var(--primary)" },
+            { class: "mdi-soccer", color: "var(--accent)" },
+            { class: "mdi-swim", color: "var(--secondary)" },
+            { class: "mdi-tennis", color: "var(--primary)" },
+            { class: "mdi-volleyball", color: "var(--accent)" }
+        ]
+    },
+    {
+        id: "travel",
+        name: "Viajes",
+        description: "Iconos relacionados con viajes",
+        icons: [
+            { class: "mdi-airplane", color: "var(--primary)" },
+            { class: "mdi-airplane-takeoff", color: "var(--accent)" },
+            { class: "mdi-airplane-landing", color: "var(--secondary)" },
+            { class: "mdi-airport", color: "var(--primary)" },
+            { class: "mdi-bag-suitcase", color: "var(--accent)" },
+            { class: "mdi-beach", color: "var(--secondary)" },
+            { class: "mdi-bus", color: "var(--primary)" },
+            { class: "mdi-car", color: "var(--accent)" },
+            { class: "mdi-earth", color: "var(--secondary)" },
+            { class: "mdi-ferry", color: "var(--primary)" },
+            { class: "mdi-train", color: "var(--accent)" },
+            { class: "mdi-map", color: "var(--secondary)" },
+            { class: "mdi-map-marker", color: "var(--primary)" },
+            { class: "mdi-mountain", color: "var(--accent)" },
+            { class: "mdi-passport", color: "var(--secondary)" },
+            { class: "mdi-subway", color: "var(--primary)" },
+            { class: "mdi-taxi", color: "var(--accent)" },
+            { class: "mdi-wallet-travel", color: "var(--secondary)" }
+        ]
+    }
+];

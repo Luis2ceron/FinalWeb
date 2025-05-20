@@ -1,0 +1,22 @@
+Juego de Memoria (Memorama):
+
+Descripción: El clásico juego de memoria. Se mejora añadiendo una funcionalidad para gestionar puntuaciones altas y sets de cartas personalizados.
+HTML Semántico: section para el tablero, aside para el marcador y la lista de puntuaciones altas, form para añadir nombre a puntuación, table o ul para la lista de puntuaciones y componentes html necesarios para el juego.
+CSS Responsive: Tablero adaptable con Grid. La lista de puntuaciones debe ser clara y responsive.
+JavaScript:
+C (Create): Añadir una nueva puntuación al array de puntuaciones altas (si es lo suficientemente alta). Permitir seleccionar un set de cartas para jugar (simulando "usar" un recurso). (Más avanzado: permitir al usuario definir un set de cartas usando URLs).
+R (Read): Mostrar el estado actual del juego. Mostrar la lista de puntuaciones altas (del localStorage), ordenadas. Mostrar la lista de sets de cartas disponibles (del JSON).
+U (Update): No aplica directamente.
+D (Delete): Permitir eliminar puntuaciones individuales o borrar todas las puntuaciones altas. (Más avanzado: permitir eliminar sets de cartas personalizados).
+Datos Mock / Carga Inicial: Cargar sets de cartas disponibles (ej. imágenes temáticas con IDs) desde un archivo JSON local. Cargar la lista de puntuaciones altas desde localStorage.
+CRUD Completo (Simulado en Puntuaciones Altas y Sets de Cartas):
+Manipulación del DOM: Crear dinámicamente el tablero de juego, actualizar el marcador, renderizar la lista de puntuaciones, mostrar/ocultar cartas y actualizar el estado del juego.
+Uso de setTimeout para la lógica de voltear cartas no coincidentes.
+Opción de diferentes niveles de dificultad (cambiando el número de cartas).
+Funcionalidad para copiar el código de color al portapapeles.
+Guardar paletas favoritas en localStorage.
+Búsqueda y Filtros: Filtrar puntuaciones altas por nombre (opcional).
+Validación de Formularios: Validar el input del nombre del jugador al guardar una puntuación.
+Gestión de Estado (Simple): Rastrear el estado del juego (jugando, pausado, terminado). Rastrear las cartas volteadas. Rastrear las puntuaciones altas. Rastrear el set de cartas activo.
+Persistencia: Utilizar localStorage para guardar y cargar la lista de puntuaciones altas y, opcionalmente, el set de cartas seleccionado por defecto.
+Promesas: Usar Workspace con Promesas para: 1) Cargar el JSON inicial de sets de cartas. 2) Simular la asincronía al guardar/eliminar puntuaciones en localStorage.
