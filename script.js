@@ -17,8 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalButton = document.getElementById('close-modal');
     const uploadForm = document.getElementById('upload-form');
     const cardNameInput = document.getElementById('card-name');
-    // Remove reference to old file input element since it no longer exists
-    // const cardImageInput = document.getElementById('card-image');
+    const cardImageUrlInput = document.getElementById('card-image-url');
     const customCardsPreview = document.getElementById('custom-cards-preview');
     const createCustomSetBtn = document.getElementById('create-custom-set');
 
@@ -115,18 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
         createCustomSetBtn.addEventListener('click', createCustomSet);
     }
 
-function handleUpload(e) {
+    function handleUpload(e) {
         e.preventDefault();
         
         const name = cardNameInput.value.trim();
-        // Remove reference to cardImageInput.files to avoid error
-        // const imageUrl = document.getElementById('card-image-url').value.trim();
-        const imageUrlInput = document.getElementById('card-image-url');
-        if (!imageUrlInput) {
-            alert('No se encontró el campo de URL de imagen');
-            return;
-        }
-        const imageUrl = imageUrlInput.value.trim();
+        const imageUrl = cardImageUrlInput.value.trim();
         
         if (!name || !imageUrl) {
             alert('Por favor completa todos los campos');
@@ -193,7 +185,11 @@ function handleUpload(e) {
         const customSet = {
             id: 'custom-' + Date.now(),
             name: 'Personalizado ' + (customCardsSet.length + 1),
-            cards: [...customCards]
+            cards: customCards.map(card => ({
+                id: card.id,
+                name: card.name,
+                image: card.image
+            }))
         };
         
         // Guardar el set en localStorage
@@ -298,11 +294,21 @@ function handleUpload(e) {
         renderGameBoard();
     }
 
-function renderGameBoard() {
+    function renderGameBoard() {
         gameBoard.innerHTML = '';
         
         // Configurar el grid según el número de cartas
-        const cols = gameState.totalPairs <= 6 ? 4 : 6;
+        const totalCards = gameState.cards.length;
+        let cols;
+        
+        if (totalCards <= 8) {
+            cols = 4;
+        } else if (totalCards <= 16) {
+            cols = 4;
+        } else {
+            cols = 6;
+        }
+        
         gameBoard.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 
         gameState.cards.forEach((card, index) => {
@@ -318,38 +324,39 @@ function renderGameBoard() {
             const frontElement = document.createElement('div');
             frontElement.className = 'front';
 
-            if (typeof card.image === 'string') {
-                const trimmedImage = card.image.trim();
-                if (trimmedImage.match(/\p{Emoji}/u)) {
-                    // Es un emoji
-                    frontElement.textContent = trimmedImage;
-                } else if (trimmedImage.toLowerCase().startsWith('data:image/webp') || trimmedImage.toLowerCase().endsWith('.webp')) {
-                    // Es una imagen webp en base64 o URL
+            // Renderizar la imagen de la carta
+            if (card.image) {
+                const cardImage = card.image.trim();
+                
+                // Verificar si es un emoji (caracteres cortos)
+                if (cardImage.length <= 2 || isEmoji(cardImage)) {
+                    frontElement.textContent = cardImage;
+                }
+                // Si es una URL o ruta de imagen
+                else if (cardImage.match(/^https?:\/\//) || 
+                         cardImage.match(/\.(png|jpg|jpeg|gif|webp)(\?.*)?$/i)) {
                     const img = document.createElement('img');
-                    img.src = trimmedImage;
+                    img.src = cardImage;
+                    img.alt = card.name || card.id;
+                    img.onerror = function() {
+                        // Si la imagen falla, mostrar un texto alternativo
+                        this.parentNode.textContent = card.name || '?';
+                    };
+                    frontElement.appendChild(img);
+                }
+                // Si es un posible código base64
+                else if (cardImage.startsWith('data:image')) {
+                    const img = document.createElement('img');
+                    img.src = cardImage;
                     img.alt = card.name || card.id;
                     frontElement.appendChild(img);
-                } else if (trimmedImage.toLowerCase().startsWith('data:image')) {
-                    // Es una imagen en base64 (no webp)
-                    const img = document.createElement('img');
-                    img.src = trimmedImage;
-                    img.alt = card.name || card.id;
-                    frontElement.appendChild(img);
-                } else if (trimmedImage.toLowerCase().match(/\.(png|jpg|jpeg|gif|webp)(\?.*)?$/)) {
-                    // Es una URL de imagen normal (con posible query string)
-                    const img = document.createElement('img');
-                    img.src = trimmedImage;
-                    img.alt = card.name || card.id;
-                    frontElement.appendChild(img);
-                } else {
-                    // Texto simple
-                    frontElement.textContent = trimmedImage;
-                    console.warn('Unexpected card image format:', trimmedImage);
+                }
+                // Si no es nada de lo anterior, mostrar el texto
+                else {
+                    frontElement.textContent = card.name || cardImage;
                 }
             } else {
-                // No es una cadena, mostrar como texto
-                frontElement.textContent = card.image;
-                console.warn('Card image is not a string:', card.image);
+                frontElement.textContent = card.name || '?';
             }
 
             cardElement.appendChild(backElement);
@@ -358,6 +365,12 @@ function renderGameBoard() {
             cardElement.addEventListener('click', () => flipCard(index));
             gameBoard.appendChild(cardElement);
         });
+    }
+    
+    // Función auxiliar para detectar emojis
+    function isEmoji(str) {
+        const regex = /[\u{1F300}-\u{1F5FF}\u{1F900}-\u{1F9FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{1F191}-\u{1F251}\u{1F004}\u{1F0CF}\u{1F170}-\u{1F171}\u{1F17E}-\u{1F17F}\u{1F18E}\u{3030}\u{2B50}\u{2B55}\u{2934}-\u{2935}\u{2B05}-\u{2B07}\u{2B1B}-\u{2B1C}\u{3297}\u{3299}\u{303D}\u{00A9}\u{00AE}\u{2122}\u{23F3}\u{24C2}\u{23E9}-\u{23EF}\u{25AA}-\u{25AB}\u{25FB}-\u{25FE}\u{25B6}\u{25C0}\u{2934}-\u{2935}\u{2B05}-\u{2B07}]/u;
+        return regex.test(str);
     }
 
     function flipCard(index) {
