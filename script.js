@@ -51,6 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadHighScores();
                 setupEventListeners();
                 addDeleteButtonToCustomSets();
+                // Set difficulty to easy and card set to animales, then start game automatically
+                difficultySelect.value = 'easy';
+                if (cardSets.some(set => set.id === 'animales')) {
+                    cardSetSelect.value = 'animales';
+                }
+                startGame();
             })
             .catch(error => {
                 console.error('Error loading card sets:', error);
@@ -67,6 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadHighScores();
                 setupEventListeners();
                 addDeleteButtonToCustomSets();
+                // Set difficulty to easy and card set to animales, then start game automatically
+                difficultySelect.value = 'easy';
+                if (cardSets.some(set => set.id === 'animales')) {
+                    cardSetSelect.value = 'animales';
+                }
+                startGame();
             });
     }
 
